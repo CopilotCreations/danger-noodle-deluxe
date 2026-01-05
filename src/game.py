@@ -31,9 +31,12 @@ class Game:
     def __init__(self, width: int = BOARD_WIDTH, height: int = BOARD_HEIGHT):
         """Initialize the game.
         
+        Creates a new game instance with a snake, food, and board.
+        Sets initial score to zero and game state to MENU.
+        
         Args:
-            width: Board width
-            height: Board height
+            width (int): Board width in cells. Defaults to BOARD_WIDTH.
+            height (int): Board height in cells. Defaults to BOARD_HEIGHT.
         """
         self.width = width
         self.height = height
@@ -46,7 +49,11 @@ class Game:
         self.game_speed = GAME_SPEED
 
     def reset(self) -> None:
-        """Reset the game to initial state."""
+        """Reset the game to initial state.
+        
+        Reinitializes the snake, spawns new food, resets the score to zero,
+        and sets the game state to PLAYING.
+        """
         self.snake.reset()
         self.food.spawn_fast(self.snake.get_positions())
         self.score = 0
@@ -55,11 +62,14 @@ class Game:
     def handle_input(self, key: str) -> bool:
         """Handle player input.
         
+        Processes keyboard input based on the current game state. Handles
+        quit commands, menu navigation, pause toggling, and snake movement.
+        
         Args:
-            key: The key pressed
+            key (str): The key pressed by the player.
             
         Returns:
-            True if game should continue, False to quit
+            bool: True if game should continue, False to quit.
         """
         if key in KEY_QUIT:
             return False
@@ -96,8 +106,11 @@ class Game:
     def update(self) -> bool:
         """Update game state.
         
+        Moves the snake, checks for wall and self collisions, and handles
+        food consumption. Only updates when the game state is PLAYING.
+        
         Returns:
-            True if game is still active, False if game over
+            bool: True if game is still active, False if game over.
         """
         if self.state != GameState.PLAYING:
             return True
@@ -123,7 +136,11 @@ class Game:
         return True
 
     def _game_over(self) -> None:
-        """Handle game over state."""
+        """Handle game over state.
+        
+        Sets the game state to GAME_OVER and updates the high score
+        if the current score exceeds the previous high score.
+        """
         self.state = GameState.GAME_OVER
         if self.score > self.high_score:
             self.high_score = self.score
@@ -131,8 +148,11 @@ class Game:
     def render(self) -> str:
         """Render the current game state.
         
+        Delegates rendering to the appropriate method based on the
+        current game state (menu, paused, game over, or playing).
+        
         Returns:
-            Rendered game as a string
+            str: Rendered game screen as a formatted string.
         """
         if self.state == GameState.MENU:
             return self._render_menu()
@@ -146,8 +166,11 @@ class Game:
     def _render_menu(self) -> str:
         """Render the main menu.
         
+        Displays the title art, game instructions, controls, and the
+        current high score.
+        
         Returns:
-            Menu screen as a string
+            str: Menu screen as a formatted string.
         """
         lines = [
             TITLE_ART,
@@ -175,8 +198,11 @@ class Game:
     def _render_paused(self) -> str:
         """Render the pause screen.
         
+        Displays the pause art along with the current score, high score,
+        and instructions to resume or quit.
+        
         Returns:
-            Pause screen as a string
+            str: Pause screen as a formatted string.
         """
         lines = [
             PAUSE_ART,
@@ -194,8 +220,11 @@ class Game:
     def _render_game_over(self) -> str:
         """Render the game over screen.
         
+        Displays the game over art, final score, snake length, high score,
+        and a congratulatory message if a new high score was achieved.
+        
         Returns:
-            Game over screen as a string
+            str: Game over screen as a formatted string.
         """
         is_new_high = self.score == self.high_score and self.score > 0
         
@@ -224,8 +253,11 @@ class Game:
     def _render_game(self) -> str:
         """Render the active game.
         
+        Renders the game board with the snake, food, score display,
+        and a minimap showing the snake's position.
+        
         Returns:
-            Game screen as a string
+            str: Game screen as a formatted string including the board and minimap.
         """
         game_board = self.board.render(
             self.snake.get_positions(),
@@ -245,8 +277,11 @@ class Game:
     def get_speed(self) -> float:
         """Get the current game speed.
         
+        Calculates the delay between frames, which decreases slightly
+        as the snake grows longer to increase difficulty.
+        
         Returns:
-            Game speed (delay between frames)
+            float: Game speed as delay in seconds between frames.
         """
         # Speed up slightly as snake grows
         speed_bonus = min(0.05, self.snake.length * 0.001)

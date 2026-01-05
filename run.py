@@ -25,7 +25,19 @@ from src.input_handler import InputHandler, clear_screen, hide_cursor, show_curs
 
 
 def main():
-    """Main entry point for the snake game."""
+    """Main entry point for the snake game.
+
+    Initializes the game and input handler, sets up the terminal,
+    and runs the main game loop. Handles keyboard input, updates
+    game state, and renders the game board at each frame.
+
+    The game loop continues until the player quits or the game ends.
+    On exit, cleans up terminal settings and displays the final score.
+
+    Raises:
+        KeyboardInterrupt: Caught and handled gracefully to ensure
+            proper terminal cleanup.
+    """
     print("🐍 Initializing Snake Game...")
     
     # Create game instance
